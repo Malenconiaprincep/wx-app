@@ -32,6 +32,23 @@ router.get('/', async function (ctx) {
   });
 });
 
+const authApi = 'http://localhost:7002/auth'
+
+router.get('/auth', async function(ctx){
+  const {code, state} = ctx.query
+  const options = {
+    url: authApi,
+    qs: {
+      code,
+      state
+    }
+  }
+  console.log(options)
+  const response = await rp(options)
+  // console.log(response)
+  ctx.body = response
+})
+
 app
   .use(router.routes())
   .use(router.allowedMethods());
