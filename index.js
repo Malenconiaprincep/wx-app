@@ -16,13 +16,15 @@ render(app, {
   // debug: true
 });
 
-const checkSignApi = 'http://localhost:7002/jsticket'
+const checkSignApi = 'http://api.tdreamer.xin/jsticket'
 
 router.get('/', async function (ctx) {
+  console.log(`${ctx.header.host}${ctx.url}`)
   const options = {
-    url : checkSignApi,
+    url: checkSignApi,
     headers: {
-      host: `${ctx.header.host}${ctx.url}`
+      //   host: `${ctx.header.host}${ctx.url}`
+      "X-Real-Host": `${ctx.header.host}${ctx.url}`
     }
   }
   const response = await rp(options)
@@ -32,10 +34,13 @@ router.get('/', async function (ctx) {
   });
 });
 
-const authApi = 'http://localhost:7002/auth'
+const authApi = 'http://api.tdreamer.xin/auth'
 
-router.get('/auth', async function(ctx){
-  const {code, state} = ctx.query
+router.get('/auth', async function (ctx) {
+  const {
+    code,
+    state
+  } = ctx.query
   const options = {
     url: authApi,
     qs: {
@@ -45,7 +50,7 @@ router.get('/auth', async function(ctx){
   }
   console.log(options)
   const response = await rp(options)
-  // console.log(response)
+  console.log(response)
   ctx.body = response
 })
 
